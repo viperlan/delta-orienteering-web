@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f5f7fb;
+  --marino: #0b2260;
+  --ruta: #d62839;
+  --ruta-dark: #b01e2e;
+  --naranja: #f39a1e;
+  --musgo: #e6ecf8;
+  --soft: #46527a;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-marino: var(--marino);
+  --color-ruta: var(--ruta);
+  --color-ruta-dark: var(--ruta-dark);
+  --color-naranja: var(--naranja);
+  --color-musgo: var(--musgo);
+  --color-soft: var(--soft);
+  --font-sans: var(--font-plex);
+  --font-display: var(--font-bricolage);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* En la capa base para que las utilidades puedan cambiar el color del foco. */
+@layer base {
+  a:focus-visible,
+  button:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
+}
+
+@keyframes trazar {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.ruta-trazo {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: trazar 2.4s ease-out 0.3s forwards;
+}
+
+/* Los controles de la portada aparecen cuando la ruta llega a ellos. */
+@keyframes aparecer-control {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+.control-pop {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: aparecer-control 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+
+/* Minijuego "Elige tu ruta" */
+@keyframes correr {
+  to {
+    offset-distance: 100%;
+  }
+}
+
+.juego-trazo {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: trazar 1.6s ease-in-out forwards;
+}
+
+.juego-corredor {
+  offset-distance: 0%;
+  offset-rotate: 0deg;
+  animation: correr 1.6s ease-in-out forwards;
+}
+
+/* La línea de los pasos se completa al hacer scroll, donde el navegador lo permite. */
+@keyframes crecer-linea {
+  from {
+    transform: scale(var(--desde-x, 1), var(--desde-y, 0));
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .pasos::after {
+      content: "";
+      position: absolute;
+      top: 1.75rem;
+      bottom: 1.75rem;
+      left: 26px;
+      width: 3px;
+      background: var(--ruta);
+      transform-origin: top left;
+      animation: crecer-linea linear both;
+      animation-timeline: view();
+      animation-range: entry 40% cover 55%;
+    }
+
+    @media (min-width: 48rem) {
+      .pasos::after {
+        --desde-x: 0;
+        --desde-y: 1;
+        right: 22%;
+        bottom: auto;
+        left: 1.75rem;
+        width: auto;
+        height: 3px;
+      }
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ruta-trazo,
+  .juego-trazo {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .control-pop {
+    animation: none;
+  }
+
+  .juego-corredor {
+    animation: none;
+    offset-distance: 100%;
+  }
+}

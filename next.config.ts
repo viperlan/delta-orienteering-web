@@ -6,6 +6,8 @@ const basePath = isGitHubPages ? "/delta-orienteering-web" : "";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  // Permite probar `npm run dev` desde 127.0.0.1 o desde un celular en la misma red.
+  allowedDevOrigins: ["127.0.0.1", "192.168.*.*"],
   ...(isGitHubPages && {
     output: "export",
     basePath,

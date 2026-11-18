@@ -46,7 +46,7 @@ export default function EligeTuRuta() {
         ))}
 
         {ruta && (
-          <g key={ruta.id}>
+          <g key={`trazo-${ruta.id}`}>
             <path
               d={ruta.d}
               pathLength={1}
@@ -103,7 +103,7 @@ export default function EligeTuRuta() {
         {/* El corredor va encima de todo para que nunca quede tapado */}
         {ruta && (
           <circle
-            key={ruta.id}
+            key={`corredor-${ruta.id}`}
             r="11"
             className="juego-corredor pointer-events-none fill-ruta stroke-white"
             strokeWidth="4"
